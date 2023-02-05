@@ -1,3 +1,4 @@
+import 'package:environment_app/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
@@ -39,14 +40,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: animation!.value,
-      appBar: AppBar(
-        title: Text('EnvHub'),
-        centerTitle: true,
-        actions: [
-          IconButton(onPressed: null, icon: Icon(Icons.refresh)),
-          IconButton(onPressed: null, icon: Icon(Icons.chat))
-        ],
-      ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
@@ -59,7 +52,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                   tag: 'logo',
                   child: Container(
                     child: Image.asset('images/Ennvlogo.png'),
-                    height: 100,
+                    height: curve!.value * 50,
                   ),
                 ),
                 AnimatedTextKit(animatedTexts: [
@@ -78,7 +71,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
               height: 48,
             ),
             RoundedButton(color: Colors.black54, text: 'Log in', onPressed: null),
-            RoundedButton(color: Colors.black54, text: 'Register', onPressed: null)
+            RoundedButton(color: Colors.black54, text: 'Register', onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => RegistrationScreen()));})
           ],
         ),
       ),
