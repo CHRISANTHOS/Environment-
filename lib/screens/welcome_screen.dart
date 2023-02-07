@@ -1,3 +1,4 @@
+import 'package:environment_app/screens/login_page.dart';
 import 'package:environment_app/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -9,7 +10,8 @@ class WelcomeScreen extends StatefulWidget {
   State<WelcomeScreen> createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProviderStateMixin{
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
   AnimationController? controller;
   Animation? animation;
   Animation? curve;
@@ -18,13 +20,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller = AnimationController(vsync: this, duration: Duration(seconds: 2));
-    animation = ColorTween(begin: Colors.black54, end: Colors.white).animate(controller!);
+    controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
+    animation = ColorTween(begin: Colors.black54, end: Colors.white)
+        .animate(controller!);
     curve = CurvedAnimation(parent: controller!, curve: Curves.easeIn);
     controller!.forward();
     controller!.addListener(() {
-      setState(() {
-      });
+      setState(() {});
     });
   }
 
@@ -34,7 +37,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
     super.dispose();
     controller!.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -56,22 +58,42 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
                   ),
                 ),
                 AnimatedTextKit(animatedTexts: [
-                  TypewriterAnimatedText(
-                    'EnvHub',
-                    textStyle: TextStyle(
-                      color: Colors.black,
-                      fontSize: 35,
-                      fontWeight: FontWeight.w800
-                    )
-                  )
+                  TypewriterAnimatedText('EnvHub',
+                      textStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: 35,
+                          fontWeight: FontWeight.w800))
                 ])
               ],
             ),
             SizedBox(
               height: 48,
             ),
-            RoundedButton(color: Colors.black54, text: 'Log in', onPressed: null),
-            RoundedButton(color: Colors.black54, text: 'Register', onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => RegistrationScreen()));})
+            RoundedButton(
+              color: Colors.black54,
+              text: 'Log in',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => LoginPage(),
+                  ),
+                );
+                print('done');
+              },
+            ),
+            RoundedButton(
+              color: Colors.black54,
+              text: 'Register',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RegistrationScreen(),
+                  ),
+                );
+              },
+            )
           ],
         ),
       ),
@@ -80,11 +102,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> with SingleTickerProvider
 }
 
 class RoundedButton extends StatelessWidget {
-
   Color color;
   String text;
-  Function? onPressed;
-  RoundedButton({super.key, required this.color,required this.text,required this.onPressed});
+  VoidCallback onPressed;
+  RoundedButton(
+      {super.key,
+      required this.color,
+      required this.text,
+      required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -95,13 +120,12 @@ class RoundedButton extends StatelessWidget {
         color: color,
         borderRadius: BorderRadius.circular(30.0),
         child: MaterialButton(
-          onPressed: (){
-            onPressed;
-          },
+          onPressed: onPressed,
           minWidth: 200.0,
           height: 42.0,
           child: Text(
             text,
+            style: TextStyle(color: Colors.white),
           ),
         ),
       ),

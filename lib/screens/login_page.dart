@@ -1,28 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:environment_app/utils/constants.dart';
-import 'login_page.dart';
 import 'welcome_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'environment_screen.dart';
 
-class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({Key? key}) : super(key: key);
+class LoginPage extends StatefulWidget {
 
   @override
-  State<RegistrationScreen> createState() => _RegistrationScreenState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class _LoginPageState extends State<LoginPage> {
 
   String? email;
   String? password;
   final _auth = FirebaseAuth.instance;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: ProgressHUD(child: Builder(builder: (context) {
+      body: ProgressHUD(child: Builder(builder: (context){
         return Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -47,10 +45,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   email = value;
                 },
                 decoration: kTextInputStyleDecoration.copyWith(
-                  hintText: 'Enter email'
+                    hintText: 'Enter email'
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               TextField(
@@ -67,14 +65,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               SizedBox(
                 height: 24,
               ),
-              RoundedButton(color: Colors.black54, text: 'Register', onPressed: (){
+              RoundedButton(color: Colors.black54, text: 'Log in', onPressed: (){
                 final progress = ProgressHUD.of(context);
-                progress!.showWithText('Please Wait...');
-                try{
-                  final newUser = _auth.createUserWithEmailAndPassword(email: email!, password: password!);
-                  if(newUser != null){
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Successfully Registered')));
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                progress!.showWithText('Please wait...');
+                final existingUser = _auth.signInWithEmailAndPassword(email: email!, password: password!);
+                try {
+                  if (existingUser != null) {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Logged In')));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => EnvironmentScreen()));
                   }
                   progress.dismiss();
                 }catch(e){

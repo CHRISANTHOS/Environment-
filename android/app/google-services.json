@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "51921458980",
+    "project_id": "envhub-b0319",
+    "storage_bucket": "envhub-b0319.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:51921458980:android:01450c984e20011431c5b1",
+        "android_client_info": {
+          "package_name": "com.urch.environment_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "51921458980-73s6het3uivvsko59kmh3afvhf00ih2k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAinMjUYrTSgER8OUDSVcqFmhgwWEbNxv4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "51921458980-73s6het3uivvsko59kmh3afvhf00ih2k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
