@@ -7,23 +7,14 @@ class EnvironmentScreen extends StatefulWidget {
 }
 
 class _EnvironmentScreenState extends State<EnvironmentScreen> {
-  int _selectedIndex = 0;
 
-  static final List<Widget> _routesOptions = <Widget>[
-    EnvironmentScreen(),
-    ChatScreen()
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.black54,
         title: Text('EnvHub'),
         centerTitle: true,
         actions: [
@@ -52,17 +43,7 @@ class _EnvironmentScreenState extends State<EnvironmentScreen> {
           ),
         ],
       ),
-      body: _routesOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(items: [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
-      ],
-      currentIndex: _selectedIndex,
-      backgroundColor: Colors.white,
-      selectedItemColor: Colors.black54,
-      unselectedItemColor: Colors.grey,
-      onTap: _onItemTapped,
-      ),
+      body: Text('EnvHub'),
     );
   }
 }

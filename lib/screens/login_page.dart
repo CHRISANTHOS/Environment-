@@ -3,7 +3,7 @@ import 'package:flutter_progress_hud/flutter_progress_hud.dart';
 import 'package:environment_app/utils/constants.dart';
 import 'welcome_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'environment_screen.dart';
+import 'buttomnav.dart';
 
 class LoginPage extends StatefulWidget {
 
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                 try {
                   if (existingUser != null) {
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Logged In')));
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => EnvironmentScreen()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ButtomNav()));
                   }
                   progress.dismiss();
                 }catch(e){

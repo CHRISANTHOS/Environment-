@@ -79,7 +79,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                     builder: (context) => LoginPage(),
                   ),
                 );
-                print('done');
               },
             ),
             RoundedButton(
