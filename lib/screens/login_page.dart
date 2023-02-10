@@ -66,6 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 24,
               ),
               RoundedButton(color: Colors.black54, text: 'Log in', onPressed: (){
+                FocusManager.instance.primaryFocus?.unfocus();
                 final progress = ProgressHUD.of(context);
                 progress!.showWithText('Please wait...');
                 final existingUser = _auth.signInWithEmailAndPassword(email: email!, password: password!);

@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:environment_app/utils/constants.dart';
 
-
 User? loggedInUser;
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 
@@ -19,7 +18,6 @@ class _ChatScreenState extends State<ChatScreen> {
   final _auth = FirebaseAuth.instance;
   final messageTextController = TextEditingController();
 
-
   String? message;
 
   void getStreamMessage() async {
@@ -30,15 +28,41 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void getCurrentUser()async{
+  void getCurrentUser() async {
     final user = _auth.currentUser;
-    try{
+    try {
       if (user != null) {
         loggedInUser = user;
         print(loggedInUser!.email);
       }
-    }catch(e){
+    } catch (e) {
       rethrow;
+    }
+  }
+
+  Widget _AppBar(){
+    switch (MessageStream().connection){
+      case Connection.loading:
+        return AppBar(
+          backgroundColor: Colors.black54,
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: Text('connecting'),
+        );
+      case Connection.done:
+        return AppBar(
+          backgroundColor: Colors.black54,
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: Text('Env-Chat'),
+        );
+       default:
+         return AppBar(
+           backgroundColor: Colors.black54,
+           automaticallyImplyLeading: false,
+           centerTitle: true,
+           title: Text('Env-Chat'),
+         );
     }
   }
 
@@ -52,12 +76,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.black54,
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        title: Text('Env-Chat'),
-      ),
+      appBar: PreferredSize(preferredSize: Size.fromHeight(50), child: _AppBar()),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,7 +104,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     TextButton(
                       onPressed: () {
                         DateTime messageTime = DateTime.now();
-                        String formattedTime = DateFormat('HH:mm').format(messageTime);
+                        String formattedTime =
+                            DateFormat('HH:mm').format(messageTime);
                         try {
                           if (message != null || message != message!.isEmpty) {
                             messageTextController.clear();
@@ -96,15 +116,26 @@ class _ChatScreenState extends State<ChatScreen> {
                               'createdOn': FieldValue.serverTimestamp(),
                               'sentTime': formattedTime
                             });
+                            FocusManager.instance.primaryFocus?.unfocus();
                             print('sent');
                             print('${DateTime.now()}');
                           }
                         } catch (e) {
                           print(e);
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Type a mesage', style: TextStyle(color: Colors.black),),),);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Type a message',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          );
                         }
                       },
-                      child: Icon(Icons.send, color: Colors.black54,),
+                      child: const Icon(
+                        Icons.send,
+                        color: Colors.black54,
+                      ),
                     ),
                   ],
                 ),
@@ -117,20 +148,34 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
+enum Connection{
+  loading,
+  done
+}
+
 class MessageStream extends StatelessWidget {
+  Connection? connection;
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-        stream: firestore.collection('messages').orderBy('createdon').snapshots(),
+        stream:
+            firestore.collection('messages').orderBy('createdOn').snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
+            return const Center(
+              child: CircularProgressIndicator(color: Colors.black54,),
             );
+          } else if (snapshot.connectionState == ConnectionState.waiting) {
+            connection = Connection.loading;
+            return const Center(
+              child: Text('connecting'),
+            );
+          } else if (snapshot.connectionState == ConnectionState.active){
+            connection = Connection.done;
           }
-          final messages = snapshot.data!.docs.reversed;
+          final messages = snapshot.data?.docs.reversed;
           List<MessageBubble> messageBubbles = [];
-          for (var message in messages) {
+          for (var message in messages!) {
             final messageText = message.data()['message'];
             final messageSender = message.data()['user'];
             final sentTime = message.data()['sentTime'];
@@ -143,17 +188,17 @@ class MessageStream extends StatelessWidget {
               time: sentTime.toString(),
             );
             messageBubbles.add(messageBubble);
-            print(messageText);
           }
           return Expanded(
             child: ListView(
               reverse: true,
-              padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               children: messageBubbles,
             ),
           );
         });
   }
+
 }
 
 class MessageBubble extends StatelessWidget {
@@ -161,30 +206,34 @@ class MessageBubble extends StatelessWidget {
   final String user;
   final bool isMe;
   final String time;
-  MessageBubble({required this.message,required this.user,required this.isMe,required this.time});
+  const MessageBubble(
+      {super.key, required this.message,
+      required this.user,
+      required this.isMe,
+      required this.time});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10.0),
       child: Column(
         crossAxisAlignment:
-        isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Material(
             elevation: 5.0,
             color: isMe ? Colors.black54 : Colors.white,
             borderRadius: isMe
                 ? const BorderRadius.only(
-                topLeft: Radius.circular(30),
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30))
+                    topLeft: Radius.circular(30),
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30))
                 : const BorderRadius.only(
-                topRight: Radius.circular(30),
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30)),
+                    topRight: Radius.circular(30),
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30)),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+              padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               child: Text(
                 message,
                 style: TextStyle(
@@ -194,11 +243,11 @@ class MessageBubble extends StatelessWidget {
           ),
           Text(
             user,
-            style: TextStyle(fontSize: 12.0, color: Colors.grey),
+            style: const TextStyle(fontSize: 12.0, color: Colors.grey),
           ),
           Text(
             time,
-            style: TextStyle(fontSize: 12.0, color: Colors.grey),
+            style: const TextStyle(fontSize: 12.0, color: Colors.grey),
           )
         ],
       ),
