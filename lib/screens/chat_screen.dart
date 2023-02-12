@@ -6,6 +6,7 @@ import 'package:environment_app/utils/constants.dart';
 
 User? loggedInUser;
 FirebaseFirestore firestore = FirebaseFirestore.instance;
+bool _texterror = false;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -98,7 +99,9 @@ class _ChatScreenState extends State<ChatScreen> {
                           //Do something with the user input.
                           message = value;
                         },
-                        decoration: kMessageTextFieldDecoration,
+                        decoration: kMessageTextFieldDecoration.copyWith(
+                          errorText: _texterror ? 'Type a message' : null,
+                        ),
                       ),
                     ),
                     TextButton(
@@ -122,6 +125,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           }
                         } catch (e) {
                           print(e);
+                          _texterror = true;
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(

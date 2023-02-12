@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'add_environment.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class EnvironmentScreen extends StatefulWidget {
   @override
@@ -7,6 +8,8 @@ class EnvironmentScreen extends StatefulWidget {
 }
 
 class _EnvironmentScreenState extends State<EnvironmentScreen> {
+  final _auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +37,8 @@ class _EnvironmentScreenState extends State<EnvironmentScreen> {
             if (value == 0) {
               //TODO: ADD REFRESH CODE
             } else if (value == 1) {
-              //TODO: ADD LOGOUT CODE
+              _auth.signOut();
+              Navigator.pop(context);
             }
           }),
         ],
