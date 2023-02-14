@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'add_environment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:environment_app/view_models/Env_inc_list_view_model.dart';
+import 'package:environment_app/widgets/env_inc_list.dart';
 
 class EnvironmentScreen extends StatefulWidget {
   @override
@@ -12,11 +15,14 @@ class _EnvironmentScreenState extends State<EnvironmentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<EnvListViewModel>(context);
+
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.black54,
-        title: Text('EnvHub'),
+        title: EnvIncList(envIncidents: vm.envIncidents),
         centerTitle: true,
         actions: [
           PopupMenuButton(

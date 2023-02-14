@@ -125,7 +125,6 @@ class _ChatScreenState extends State<ChatScreen> {
                           }
                         } catch (e) {
                           print(e);
-                          _texterror = true;
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
@@ -178,7 +177,9 @@ class MessageStream extends StatelessWidget {
             connection = Connection.done;
           }
           final messages = snapshot.data?.docs.reversed;
+
           List<MessageBubble> messageBubbles = [];
+
           for (var message in messages!) {
             final messageText = message.data()['message'];
             final messageSender = message.data()['user'];
@@ -210,7 +211,8 @@ class MessageBubble extends StatelessWidget {
   final String user;
   final bool isMe;
   final String time;
-  const MessageBubble(
+
+  MessageBubble(
       {super.key, required this.message,
       required this.user,
       required this.isMe,

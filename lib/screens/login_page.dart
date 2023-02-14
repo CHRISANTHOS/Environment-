@@ -98,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 10,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'Don\'t have an account ?',
