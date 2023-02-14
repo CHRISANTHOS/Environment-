@@ -1,7 +1,8 @@
 import 'package:environment_app/model/Env-incident.dart';
 import 'package:environment_app/services/web_services.dart';
+import 'package:flutter/material.dart';
 
-class AddEnvViewModel{
+class AddEnvViewModel extends ChangeNotifier{
 
   String? title;
   String? description;

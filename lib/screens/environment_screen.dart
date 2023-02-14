@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:environment_app/view_models/Env_inc_list_view_model.dart';
 import 'package:environment_app/widgets/env_inc_list.dart';
+import 'package:environment_app/view_models/add_env_view_model.dart';
 
 class EnvironmentScreen extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _EnvironmentScreenState extends State<EnvironmentScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.black54,
-        title: EnvIncList(envIncidents: vm.envIncidents),
+        title: Text('EnvHub'),
         centerTitle: true,
         actions: [
           PopupMenuButton(
@@ -49,12 +50,13 @@ class _EnvironmentScreenState extends State<EnvironmentScreen> {
           }),
         ],
       ),
-      body: Text('EnvHub'),
+      body: EnvIncList(envIncidents: vm.envIncidents),
       floatingActionButton: FloatingActionButton(
         onPressed: (){
           showModalBottomSheet(
             context: context,
-            builder: (context) => AddEnvScreen()
+            builder: (context) => ChangeNotifierProvider(create: (BuildContext context) => AddEnvViewModel(),
+            child: AddEnvScreen())
           );
         },
         child: Icon(Icons.add),

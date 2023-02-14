@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:environment_app/view_models/add_env_view_model.dart';
 
-class AddEnvScreen extends StatelessWidget {
+class AddEnvScreen extends StatefulWidget {
+  @override
+  State<AddEnvScreen> createState() => _AddEnvScreenState();
+}
 
+class _AddEnvScreenState extends State<AddEnvScreen> {
   @override
   Widget build(BuildContext context) {
+    final vm = Provider.of<AddEnvViewModel>(context);
+
     return Container(
       color: const Color(0xff757575),
       child: Container(
@@ -25,8 +33,7 @@ class AddEnvScreen extends StatelessWidget {
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  child: Column( 
-                    // crossAxisAlignment: CrossAxisAlignment.stretch,
+                  child: Column(
                     children: [
                       Container(
                         height: 250,
@@ -43,11 +50,13 @@ class AddEnvScreen extends StatelessWidget {
                           style: TextStyle(color: Colors.black54),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       TextField(
-                        onChanged: null,
+                        onChanged: (value){
+                          vm.title = value;
+                        },
                         decoration: InputDecoration(
                           labelText: 'Enter title',
                           border: OutlineInputBorder(
@@ -55,11 +64,13 @@ class AddEnvScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       TextField(
-                        onChanged: null,
+                        onChanged: (value){
+                          vm.description = value;
+                        },
                         textInputAction: TextInputAction.done,
                         maxLines: null,
                         keyboardType: TextInputType.multiline,
@@ -70,11 +81,12 @@ class AddEnvScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       TextButton(
                         onPressed: () {
+                          vm.saveIncident();
                           Navigator.pop(context);
                         },
                         style: ButtonStyle(
