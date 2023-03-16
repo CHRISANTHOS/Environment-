@@ -15,7 +15,7 @@ class _ButtomNavState extends State<ButtomNav> {
 
   static final List<Widget> _routesOptions = <Widget>[
     EnvironmentScreen(),
-    ChatScreen()
+    const ChatScreen()
   ];
 
   void _onItemTapped(int index) {
@@ -28,7 +28,7 @@ class _ButtomNavState extends State<ButtomNav> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _routesOptions[_selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(items: [
+      bottomNavigationBar: BottomNavigationBar(items: const[
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
         BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
       ],

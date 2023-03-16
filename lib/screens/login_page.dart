@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextField(
                 obscureText: true,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
                 textAlign: TextAlign.center,
                 onChanged: (value) {
                   password = value;
@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: kTextInputStyleDecoration.copyWith(
                     hintText: 'Enter password'),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 24,
               ),
               RoundedButton(
@@ -78,13 +78,13 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ButtomNav()));
+                                builder: (context) => const ButtomNav()));
                       }
                       progress.dismiss();
                     } catch (e) {
                       print(e);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text(
                             'Fill in details',
                             style: TextStyle(fontSize: 15.0),
@@ -94,13 +94,13 @@ class _LoginPageState extends State<LoginPage> {
                       progress.dismiss();
                     }
                   }),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Don\'t have an account ?',
                     style: TextStyle(fontSize: 10),
                   ),
@@ -109,11 +109,11 @@ class _LoginPageState extends State<LoginPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RegistrationScreen(),
+                          builder: (context) => const RegistrationScreen(),
                         ),
                       );
                     },
-                    child: Text('create'),
+                    child: const Text('create'),
                   )
                 ],
               )

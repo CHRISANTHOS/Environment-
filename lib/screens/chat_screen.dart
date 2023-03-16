@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:environment_app/utils/constants.dart';
+import 'package:connectivity/connectivity.dart';
 
 User? loggedInUser;
 FirebaseFirestore firestore = FirebaseFirestore.instance;
@@ -18,6 +21,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _auth = FirebaseAuth.instance;
   final messageTextController = TextEditingController();
+  StreamSubscription<ConnectivityResult>? subscription;
+  Stream<ConnectivityResult>? networkStream;
 
   String? message;
 
@@ -41,30 +46,35 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  Widget _AppBar(){
-    switch (MessageStream().connection){
-      case Connection.loading:
-        return AppBar(
-          backgroundColor: Colors.black54,
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: Text('connecting'),
-        );
-      case Connection.done:
-        return AppBar(
-          backgroundColor: Colors.black54,
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: Text('Env-Chat'),
-        );
-       default:
-         return AppBar(
-           backgroundColor: Colors.black54,
-           automaticallyImplyLeading: false,
-           centerTitle: true,
-           title: Text('Env-Chat'),
-         );
-    }
+  Widget _appBar(BuildContext context){
+    return StreamBuilder(
+        stream: networkStream,
+        builder: (context, AsyncSnapshot<ConnectivityResult> snapshot){
+          if (snapshot.hasData && snapshot.data == ConnectivityResult.none) {
+            // Return your UI when the device is connected to the internet
+            return AppBar(
+              backgroundColor: Colors.black54,
+              automaticallyImplyLeading: false,
+              centerTitle: true,
+              title: const Text('connecting'),
+            );
+          } else if(snapshot.connectionState == ConnectionState.waiting){
+            // Return your UI when the device is not connected to the internet
+            return AppBar(
+              backgroundColor: Colors.black54,
+              automaticallyImplyLeading: false,
+              centerTitle: true,
+              title: const Text('connecting'),
+            );
+          }
+          print(snapshot.data);
+          return AppBar(
+            backgroundColor: Colors.black54,
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            title: const Text('Env-Chat'),
+          );
+    });
   }
 
   @override
@@ -72,12 +82,24 @@ class _ChatScreenState extends State<ChatScreen> {
     // TODO: implement initState
     super.initState();
     getCurrentUser();
+    networkStream = Connectivity().onConnectivityChanged;
+    subscription = networkStream!.listen((ConnectivityResult connectivityResult) {
+      setState(() {});
+    });
+    print(networkStream);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    subscription!.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size.fromHeight(50), child: _AppBar()),
+      appBar: PreferredSize(preferredSize: const Size.fromHeight(50), child: _appBar(context)),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -120,11 +142,12 @@ class _ChatScreenState extends State<ChatScreen> {
                               'sentTime': formattedTime
                             });
                             FocusManager.instance.primaryFocus?.unfocus();
-                            print('sent');
-                            print('${DateTime.now()}');
                           }
                         } catch (e) {
                           print(e);
+                          setState(() {
+                            _texterror = true;
+                          });
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                               content: Text(
@@ -151,13 +174,17 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 }
 
-enum Connection{
-  loading,
-  done
+
+bool connection = false;
+
+class MessageStream extends StatefulWidget {
+
+  @override
+  State<MessageStream> createState() => _MessageStreamState();
 }
 
-class MessageStream extends StatelessWidget {
-  Connection? connection;
+class _MessageStreamState extends State<MessageStream> {
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -166,15 +193,19 @@ class MessageStream extends StatelessWidget {
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
-              child: CircularProgressIndicator(color: Colors.black54,),
+              child: Text('waiting for messages', style: TextStyle(color: Colors.black),),
             );
           } else if (snapshot.connectionState == ConnectionState.waiting) {
-            connection = Connection.loading;
+              Future.delayed(Duration.zero, (){
+                connection = false;
+              });
             return const Center(
               child: Text('connecting'),
             );
           } else if (snapshot.connectionState == ConnectionState.active){
-            connection = Connection.done;
+            Future.delayed(Duration.zero, (){
+              connection = true;
+            });
           }
           final messages = snapshot.data?.docs.reversed;
 
@@ -203,7 +234,6 @@ class MessageStream extends StatelessWidget {
           );
         });
   }
-
 }
 
 class MessageBubble extends StatelessWidget {

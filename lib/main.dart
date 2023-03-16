@@ -15,10 +15,12 @@ void main() async{
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Environment Chat',
-      home: ChangeNotifierProvider(create: (BuildContext context) => EnvListViewModel(),
-      child: SplashScreen()),
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => EnvListViewModel(),
+      child: const MaterialApp(
+        title: 'Environment Chat',
+        home: SplashScreen(),
+      ),
     );
   }
 }
