@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -52,28 +51,12 @@ class _ChatScreenState extends State<ChatScreen> {
         builder: (context, AsyncSnapshot<ConnectivityResult> snapshot){
           if (snapshot.hasData && snapshot.data == ConnectivityResult.none) {
             // Return your UI when the device is connected to the internet
-            return AppBar(
-              backgroundColor: Colors.black54,
-              automaticallyImplyLeading: false,
-              centerTitle: true,
-              title: const Text('connecting'),
-            );
+            return const Text('connecting');
           } else if(snapshot.connectionState == ConnectionState.waiting){
             // Return your UI when the device is not connected to the internet
-            return AppBar(
-              backgroundColor: Colors.black54,
-              automaticallyImplyLeading: false,
-              centerTitle: true,
-              title: const Text('connecting'),
-            );
+            return const Text('connecting');
           }
-          print(snapshot.data);
-          return AppBar(
-            backgroundColor: Colors.black54,
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            title: const Text('Env-Chat'),
-          );
+          return const Text('Env-Chat');
     });
   }
 
@@ -99,7 +82,12 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(preferredSize: const Size.fromHeight(50), child: _appBar(context)),
+      appBar: AppBar(
+        backgroundColor: Colors.black54,
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+        title: _appBar(context),
+      ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,20 +130,15 @@ class _ChatScreenState extends State<ChatScreen> {
                               'sentTime': formattedTime
                             });
                             FocusManager.instance.primaryFocus?.unfocus();
+                            setState(() {
+                              _texterror = false;
+                            });
                           }
                         } catch (e) {
                           print(e);
                           setState(() {
                             _texterror = true;
                           });
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Type a message',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          );
                         }
                       },
                       child: const Icon(
@@ -175,7 +158,6 @@ class _ChatScreenState extends State<ChatScreen> {
 }
 
 
-bool connection = false;
 
 class MessageStream extends StatefulWidget {
 
@@ -195,17 +177,6 @@ class _MessageStreamState extends State<MessageStream> {
             return const Center(
               child: Text('waiting for messages', style: TextStyle(color: Colors.black),),
             );
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-              Future.delayed(Duration.zero, (){
-                connection = false;
-              });
-            return const Center(
-              child: Text('connecting'),
-            );
-          } else if (snapshot.connectionState == ConnectionState.active){
-            Future.delayed(Duration.zero, (){
-              connection = true;
-            });
           }
           final messages = snapshot.data?.docs.reversed;
 
