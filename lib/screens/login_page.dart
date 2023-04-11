@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
               Flexible(
                 child: Hero(
                   tag: 'logo',
-                  child: Container(
+                  child: SizedBox(
                     height: 200,
                     child: Image.asset('images/Ennvlogo.png'),
                   ),
@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               TextField(
                 keyboardType: TextInputType.emailAddress,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
                 textAlign: TextAlign.center,
                 onChanged: (value) {
                   email = value;
@@ -82,7 +82,6 @@ class _LoginPageState extends State<LoginPage> {
                       }
                       progress.dismiss();
                     } catch (e) {
-                      print(e);
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(

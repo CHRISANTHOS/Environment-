@@ -8,7 +8,7 @@ import 'package:connectivity/connectivity.dart';
 
 User? loggedInUser;
 FirebaseFirestore firestore = FirebaseFirestore.instance;
-bool _texterror = false;
+bool _textError = false;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -110,7 +110,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           message = value;
                         },
                         decoration: kMessageTextFieldDecoration.copyWith(
-                          errorText: _texterror ? 'Type a message' : null,
+                          errorText: _textError ? 'Type a message' : null,
                         ),
                       ),
                     ),
@@ -131,13 +131,13 @@ class _ChatScreenState extends State<ChatScreen> {
                             });
                             FocusManager.instance.primaryFocus?.unfocus();
                             setState(() {
-                              _texterror = false;
+                              _textError = false;
                             });
                           }
                         } catch (e) {
                           print(e);
                           setState(() {
-                            _texterror = true;
+                            _textError = true;
                           });
                         }
                       },

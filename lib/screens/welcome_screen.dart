@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 class WelcomeScreen extends StatefulWidget {
-  const WelcomeScreen({Key? key}) : super(key: key);
 
   @override
   State<WelcomeScreen> createState() => _WelcomeScreenState();
@@ -21,7 +20,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     // TODO: implement initState
     super.initState();
     controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 2));
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
     animation = ColorTween(begin: Colors.black54, end: Colors.white)
         .animate(controller!);
     curve = CurvedAnimation(parent: controller!, curve: Curves.easeIn);
@@ -52,21 +51,21 @@ class _WelcomeScreenState extends State<WelcomeScreen>
               children: [
                 Hero(
                   tag: 'logo',
-                  child: Container(
-                    child: Image.asset('images/Ennvlogo.png'),
+                  child: SizedBox(
                     height: curve!.value * 50,
+                    child: Image.asset('images/Ennvlogo.png'),
                   ),
                 ),
                 AnimatedTextKit(animatedTexts: [
                   TypewriterAnimatedText('EnvHub',
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                           color: Colors.black,
                           fontSize: 35,
                           fontWeight: FontWeight.w800))
                 ])
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 48,
             ),
             RoundedButton(
@@ -88,7 +87,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => RegistrationScreen(),
+                    builder: (context) => const RegistrationScreen(),
                   ),
                 );
               },
@@ -113,7 +112,7 @@ class RoundedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
       child: Material(
         elevation: 5.0,
         color: color,
@@ -124,7 +123,7 @@ class RoundedButton extends StatelessWidget {
           height: 42.0,
           child: Text(
             text,
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
         ),
       ),

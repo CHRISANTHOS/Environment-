@@ -41,7 +41,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
               TextField(
                 keyboardType: TextInputType.emailAddress,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
                 textAlign: TextAlign.center,
                 onChanged: (value){
                   email = value;
@@ -50,12 +50,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   hintText: 'Enter email'
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 8,
               ),
               TextField(
                 obscureText: true,
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: Colors.black),
                 textAlign: TextAlign.center,
                 onChanged: (value){
                   password = value;
@@ -64,7 +64,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     hintText: 'Enter password'
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 24,
               ),
               RoundedButton(color: Colors.black54, text: 'Register', onPressed: (){
@@ -73,14 +73,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 try{
                   final newUser = _auth.createUserWithEmailAndPassword(email: email!, password: password!);
                   if(newUser != null){
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Successfully Registered')));
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Successfully Registered')));
                     Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
                   }
                   progress.dismiss();
                 }catch(e){
-                  print(e);
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                       content: Text('Fill in details', style: TextStyle(fontSize: 15.0),),
                     ),
                   );

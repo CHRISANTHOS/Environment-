@@ -35,7 +35,7 @@ class _AddEnvScreenState extends State<AddEnvScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      Container(
+                      SizedBox(
                         height: 250,
                         width: 250,
                         child: Image.network(

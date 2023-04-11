@@ -23,7 +23,7 @@ class _EnvironmentScreenState extends State<EnvironmentScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.black54,
-        title: Text('EnvHub'),
+        title: const Text('EnvHub'),
         centerTitle: true,
         actions: [
           PopupMenuButton(
@@ -59,8 +59,8 @@ class _EnvironmentScreenState extends State<EnvironmentScreen> {
             child: AddEnvScreen())
           );
         },
-        child: Icon(Icons.add),
         backgroundColor: Colors.black54,
+        child: const Icon(Icons.add),
       ),
     );
   }
